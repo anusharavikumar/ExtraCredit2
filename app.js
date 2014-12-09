@@ -1,50 +1,39 @@
+
 /**
+
 Mighty Gumball, Inc.
 Version 7.0
-- Minor modifications of Version 5.0 for AWS Elastic Beanstalk
+
 NodeJS-Enabled Standing Gumball
 Model# M102988
 Serial# 1234998871109
+
 **/
 
-//slide 83
 var crypto = require('crypto');
 var fs = require('fs');
 var express = require('express');
 var Client = require('node-rest-client').Client;
 var async = require('async');
-var http = require('http');
-var path = require('path');
-
-
 
 var app = express();
-var server = http.createServer(app);
-//app.use(express.bodyParser());
+app.use(express.bodyParser());
 //app.use(require('connect-multiparty')())
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 8080
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1'
 app.use(express.json());
-app.use(express.bodyParser());
 app.use(express.urlencoded());
-app.use(express.favicon());
-app.use(express.logger('dev'));
 app.use("/images", express.static(__dirname + '/images'));
-handlebars  = require('express3-handlebars');
-hbs = handlebars.create();
+var handlebars  = require('express3-handlebars');
+var hbs = handlebars.create();
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
-
 
 var DB = require('mongodb').Db,
     DB_Connection = require('mongodb').Connection,
 	DB_Server = require('mongodb').Server,
-	
-	
-	
-	//slide 84
-	
- db_host = "ds049150.mongolab.com";
+
+db_host = "ds049150.mongolab.com";
 var db_port = "49150";
 var db_user = "cmpe281lab3";
 var db_pwd = "cmpe281";
@@ -56,7 +45,7 @@ var db = new DB(db_name,
 						poolSize: 20}),
 						{w: 1} );
 						
-var secretKey = "Hello";
+var secretKey = "Helloilovedisneyanddisneysongs";
 						
 var get_hash = function (state, ts) {
     text = state + "|" + ts + "|" + secretKey;
@@ -96,12 +85,6 @@ var db_init = function (callback) {
 				], callback);
 			};
 	
-	
-	
-/////Slide no 85
-
-
-
 var page = function(req,res,state,ts){
     db.collection('gumball',function(err,collection){
         collection.find({serialNumber:'1234998871109'}).toArray(function(err,results){
@@ -141,16 +124,16 @@ var page = function(req,res,state,ts){
 
 var order = function( req, res, state, ts) {
   db.collection('gumball', function(err, collection){
-  collection.find({serialNumber: '1234998871109'}).toArray(function(err, results){
+    collection.find({serialNumber: '1234998871109'}).toArray(function(err, results){
 		
 		var data = results[0];
 		var rec_id = data._id;
 		console.log("updating rec id: " + rec_id);
 		
-		count = data.countGumballs;
+		var count = data.countGumballs;
 		if (count > 0) {
 			count--;
-			collection.update({_id: rec_id}, {$set: {countGumbalss: count}}, function(err,results){
+			collection.update({_id: rec_id}, {$set: {countGumbals: count}}, function(err,results){
 					console.log("count after = " + count );
 					page(req, res, state, ts);
 					}
@@ -167,7 +150,7 @@ var order = function( req, res, state, ts) {
 }
 
 
-var handle_post = function (req, res, next) {
+var handle_post = function (req, res) {
 
     console.log( "Post: " + "Action: " +  req.body.event + " State: " + req.body.state + "\n" ) ;
     var hash1 = "" + req.body.hash ;
@@ -224,10 +207,12 @@ server.listen(server_port, server_ip_address, function(){
   console.log("Listening on " + server_ip_address + ", server_port " + server_port)
 });
 
-
 /**
+
 Mighty Gumball, Inc.
+
 NodeJS-Enabled Standing Gumball
 Model# M102988
 Serial# 1234998871109
+
 **/
